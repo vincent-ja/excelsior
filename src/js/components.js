@@ -60,7 +60,12 @@ export class InventoryItem extends React.Component{
         isHovered: false,
         hoverX: 0,
         hoverY: 0,
+        menuOpen: false,
+        menuX: 0,
+        menuY: 0
     };
+
+    wrapperRef = React.createRef();
 
     constructor(props){
         super(props);
@@ -84,25 +89,62 @@ export class InventoryItem extends React.Component{
         })
     }).bind(this);
 
+    handleClick = ((event) => {
+        this.setState({
+            menuOpen: true,
+            menuX: event.clientX,
+            menuY: event.clientY
+        });
+    }).bind(this);
+
+    handleOutsideClick = ((event) => {
+        if(this.state.menuOpen && !this.wrapperRef.current.contains(event.target)){
+            this.setState({
+                menuOpen: false
+            });
+        }
+    }).bind(this);
+
+    componentDidMount(){
+        document.addEventListener('click', this.handleOutsideClick);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener('click', this.handleOutsideClick);
+    }
+
     render(){
         return (
-            <div
-              className="item"
-              onMouseEnter={() => this.handleMouseHover(true)}
-              onMouseLeave={() => this.handleMouseHover(false)}
-              onMouseMove={this.handleMouseMove}
-            >
-                {this.state.itemName}
+            <div ref={this.wrapperRef}>
                 <div
-                  className="hover-block" 
+                  className="item"
+                  onMouseEnter={() => this.handleMouseHover(true)}
+                  onMouseLeave={() => this.handleMouseHover(false)}
+                  onMouseMove={this.handleMouseMove}
+                  onClick={this.handleClick}
+                >
+                    {this.state.itemName}
+                    <div
+                      className="hover-block" 
+                      style={{
+                          display: (this.state.isHovered && !this.state.menuOpen) ? "block" : "none",
+                          top: this.state.hoverY + 5,
+                          left: this.state.hoverX + 5
+                      }}
+                    >
+                        <h3>{this.state.itemName}</h3>
+                        <p>{this.state.itemDesc}</p>
+                    </div>
+                </div>
+                <div
+                  className="menu"
                   style={{
-                    display: this.state.isHovered ? "block" : "none",
-                    top: this.state.hoverY + 5,
-                    left: this.state.hoverX + 5
+                      display: this.state.menuOpen ? "block" : "none",
+                      top: this.state.menuY,
+                      left: this.state.menuX
                   }}
                 >
-                    <h3>{this.state.itemName}</h3>
-                    <p>{this.state.itemDesc}</p>
+                    <div>Inspect</div>
                 </div>
             </div>
         );
@@ -127,11 +169,11 @@ export class Options extends React.Component{
     }).bind(this);
 
     componentDidMount(){
-        window.addEventListener('keydown', this.handleKeyDown);
+        document.addEventListener('keydown', this.handleKeyDown);
     }
 
     componentWillUnmount(){
-        window.removeEventListener('keydown', this.handleKeyDown);
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     handleSelection(num){
