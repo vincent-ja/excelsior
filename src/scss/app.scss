@@ -30,6 +30,34 @@ body{
     border-right: 1px dashed rgb(80,80,80);
     grid-area: inventory;
     padding: 10px;
+
+    .item{
+        display: table;
+        padding: 5px;
+        cursor: pointer;
+
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+
+    .hover-block{
+        pointer-events: none;
+        position: absolute;
+        background-color: rgb(0,0,50);
+        border: 1px solid rgb(80,80,80);
+        padding: 20px;
+        max-width: 250px;
+
+        h3{
+            margin: 0;
+            padding: 0;
+        }
+
+        p{
+            margin-bottom: 0;
+        }
+    }
 }
 
 .game-text{
@@ -49,9 +77,7 @@ body{
     grid-template-columns: repeat(auto-fill, 50%);
 
     div{
-        text-decoration: none;
         padding: 8px;
-        list-style-type: none;
 
         &:hover{
             text-decoration: underline;
