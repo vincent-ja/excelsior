@@ -76,34 +76,34 @@ export class InventoryItem extends React.Component{
         }
     }
 
-    handleMouseHover = ((hover) => {
+    handleMouseHover = (hover) => {
         this.setState({
             isHovered: hover
         });
-    }).bind(this);
+    };
 
-    handleMouseMove = ((event) => {
+    handleMouseMove = (event) => {
         this.setState({
             hoverX: event.clientX,
             hoverY: event.clientY
         })
-    }).bind(this);
+    };
 
-    handleClick = ((event) => {
+    handleClick = (event) => {
         this.setState({
             menuOpen: true,
             menuX: event.clientX,
             menuY: event.clientY
         });
-    }).bind(this);
+    };
 
-    handleOutsideClick = ((event) => {
+    handleOutsideClick = (event) => {
         if(this.state.menuOpen && !this.wrapperRef.current.contains(event.target)){
             this.setState({
                 menuOpen: false
             });
         }
-    }).bind(this);
+    };
 
     componentDidMount(){
         document.addEventListener('click', this.handleOutsideClick);
@@ -162,11 +162,11 @@ export class GameText extends React.Component{
 }
 
 export class Options extends React.Component{    
-    handleKeyDown = ((e) => {
+    handleKeyDown = (e) => {
         if(!isNaN(e.key)){
             this.handleSelection(e.key)
         }
-    }).bind(this);
+    };
 
     componentDidMount(){
         document.addEventListener('keydown', this.handleKeyDown);
