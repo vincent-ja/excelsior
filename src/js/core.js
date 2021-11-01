@@ -1,13 +1,27 @@
-var dispatchEvent = (name, details) => {
-    document.dispatchEvent(
-        new CustomEvent(name, details)
-    );
-}
+export default class Core{
+    static instance = null;
 
-export var addItem = (id) => {
-    dispatchEvent('excelsiorAddItem', { detail: { id: id } });
-}
+    static addItem = (id) => {
+        this.instance.addItem(id);
+    }
 
-export var print = (text) => {
-    dispatchEvent('excelsiorAppendGameText', { detail: { text: text } });
+    static print = (spans) => {
+        let arr = [];
+        for(let i = 0; i < spans.length; i++){
+            let type = "none";
+            let item = spans[i];
+
+            if(spans[i].endsWith("/")){
+                type = "line";
+                item = item.substring(0, item.length - 1);
+            }
+
+            arr.push({
+                content: item,
+                type: type
+            });
+        }
+
+        this.instance.appendText(arr, "none");
+    }
 }
