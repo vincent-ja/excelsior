@@ -30,6 +30,8 @@ body{
     border-right: 1px dashed rgb(80,80,80);
     grid-area: inventory;
     padding: 10px;
+    overflow: auto;
+    min-height: 0;
 
     .item{
         display: table;
@@ -38,44 +40,6 @@ body{
 
         &:hover{
             text-decoration: underline;
-        }
-    }
-
-    .hover-block{
-        pointer-events: none;
-        position: absolute;
-        background-color: rgb(0,0,50);
-        border: 1px solid rgb(80,80,80);
-        padding: 20px;
-        max-width: 250px;
-        box-shadow: 0px 0px 10px 0px rgb(40,40,40);
-        z-index: 20;
-
-        h3{
-            margin: 0;
-            padding: 0;
-        }
-
-        p{
-            margin-bottom: 0;
-        }
-    }
-
-    .menu{
-        position: absolute;
-        background-color: rgb(0,0,50);
-        border: 1px solid rgb(80,80,80);
-        max-width: 250px;
-        box-shadow: 0px 0px 10px 0px rgb(40,40,40);
-        z-index: 10;
-
-        div{
-            padding: 8px;
-            cursor: pointer;
-
-            &:hover{
-                text-decoration: underline;
-            }
         }
     }
 }
@@ -104,6 +68,54 @@ body{
         &:hover{
             text-decoration: underline;
             cursor: pointer;
+        }
+    }
+}
+
+.action{
+    text-shadow: 0px 0px 2px rgb(255,255,255);
+    cursor: pointer;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.hover-block{
+    pointer-events: none;
+    position: absolute;
+    background-color: rgb(0,0,50);
+    border: 1px solid rgb(80,80,80);
+    padding: 20px;
+    max-width: 250px;
+    box-shadow: 0px 0px 10px 0px rgb(40,40,40);
+    z-index: 20;
+
+    h3{
+        margin: 0;
+        padding: 0;
+    }
+
+    p{
+        margin-bottom: 0;
+    }
+}
+
+.menu{
+    position: absolute;
+    background-color: rgb(0,0,50);
+    border: 1px solid rgb(80,80,80);
+    max-width: 250px;
+    box-shadow: 0px 0px 10px 0px rgb(40,40,40);
+    z-index: 10;
+    padding: 4px 8px 4px 8px;
+
+    div{
+        padding: 4px 0px 4px 0px;
+        cursor: pointer;
+
+        &:hover{
+            text-decoration: underline;
         }
     }
 }

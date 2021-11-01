@@ -14,10 +14,19 @@ var Items = {
         Name: "Bow & Arrow",
         Desc: "A wooden bow and a quiver full of arrows.",
         Actions: {
-            "Inspect": () => {
-                Core.print(["A trusty bow and arrow./"]);
+            "Inspect": (item) => {
+                Core.print([
+                    "There are " + item.Arrows + " arrows left in the quiver./"
+                ]);
+            },
+            "Shoot": (item) => {
+                item.Arrows -= 1;
+                Core.print([
+                    "You shot an arrow./"
+                ]);
             }
-        }
+        },
+        Arrows: 5
     }
 }
 

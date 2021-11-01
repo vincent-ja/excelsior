@@ -67,7 +67,7 @@ export class InventoryItem extends React.Component{
             let mappedItems = Object.keys(menuItems).map((value, key) => {
                 return(
                     <div key={key} onClick={(e) => {
-                        menuItems[value]();
+                        menuItems[value](GameData.Items[this.props.id]);
                         this.setState({
                             menuOpen: false,
                             hoverX: e.clientX,
