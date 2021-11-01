@@ -17,6 +17,22 @@ export class GameContainer extends React.Component{
         ]
     };
 
+    componentDidMount(){
+        document.addEventListener('excelsiorAddItem', this.addItem);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener('excelsiorAddItem', this.addItem);
+    }
+
+    addItem = (e) => {
+        let inv = this.state.inventory.slice();
+        inv.push({ id: e.detail.id })
+        this.setState({
+            inventory: inv
+        })
+    }
+
     render(){
         return (
             <div className="game-container">
@@ -113,6 +129,26 @@ export class InventoryItem extends React.Component{
         document.removeEventListener('click', this.handleOutsideClick);
     }
 
+    renderMenuItems(){
+        if(GameData.Items[this.props.id]){
+            let menuItems = GameData.Items[this.props.id].Actions;
+            let mappedItems = Object.keys(menuItems).map((value, key) => {
+                return(
+                    <div onClick={(e) => {
+                        menuItems[value]();
+                        this.setState({
+                            menuOpen: false,
+                            hoverX: e.clientX,
+                            hoverY: e.clientY
+                        });
+                    }}>{value}</div>
+                );
+            });
+
+            return mappedItems;
+        }
+    }
+
     render(){
         return (
             <div ref={this.wrapperRef}>
@@ -144,7 +180,7 @@ export class InventoryItem extends React.Component{
                       left: this.state.menuX
                   }}
                 >
-                    <div>Inspect</div>
+                    {this.renderMenuItems()}
                 </div>
             </div>
         );
@@ -152,10 +188,28 @@ export class InventoryItem extends React.Component{
 }
 
 export class GameText extends React.Component{
+    state = {
+        text: ""
+    }
+
+    componentDidMount(){
+        document.addEventListener('excelsiorAppendGameText', this.appendText);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener('excelsiorAppendGameText', this.appendText);
+    }
+
+    appendText = (e) => {
+        this.setState({
+            text: this.state.text + e.detail.text
+        });
+    }
+
     render(){
         return (
             <div className="game-text">
-                
+                {this.state.text}
             </div>
         );
     }
