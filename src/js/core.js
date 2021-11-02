@@ -1,23 +1,44 @@
 import _ from "lodash";
-import { Items } from "./gamedata";
 
 export default class Core{
     static instance = null;
 
-    static getItemInstance = (id) => {
-        return _.cloneDeep(Items[id]);
+    static setInstance(inst, gameData){
+        this.instance = inst;
+        window.Excelsior = {
+            Core: this,
+            GameData: gameData
+        };
     }
 
-    static newItem = (item = {}) => {
-        return _.defaultsDeep(item, {
-            Name: "< Unknown >",
+    static instantiate = (item) => {
+        let inst = _.cloneDeep(item);
+        inst.Init(inst);
+        return inst;
+    }
+
+    static newItem = (item) => {
+        return _.defaults(item, {
+            Init: () => {},
+            AddedToInventory: () => {},
+            Name: "[Undefined]",
             Desc: "",
             Actions: {}
         });
     }
 
+    static newButton = (menuItem) => {
+        return _.defaults(menuItem, {
+            Name: "[Undefined]",
+            Condition: () => { return true; },
+            Click: () => {}
+        });
+    }
+
     static addToInventory = (item) => {
-        this.instance.addToInventory(item);
+        let uid = this.instance.addToInventory(item);
+        item.AddedToInventory(item);
+        return uid;
     }
 
     static print = (spans, actionDefs = []) => {
@@ -48,5 +69,9 @@ export default class Core{
         }
 
         this.instance.appendText(arr, "none");
+    }
+
+    static clear = () => {
+        this.instance.clearText();
     }
 }

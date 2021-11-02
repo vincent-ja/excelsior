@@ -9,7 +9,7 @@ export class Inventory extends React.Component{
 
         const mappedItems = this.props.items.map((value) => {
             return (
-                <InventoryItem key={value.uid} uid={value.uid} item={value.item}/>
+                <InventoryItem key={value.Uid} item={value}/>
             );
         });
 

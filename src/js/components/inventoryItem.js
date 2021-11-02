@@ -12,9 +12,11 @@ export class InventoryItem extends React.Component{
 
     wrapperRef = React.createRef();
 
-    handleMouseHover = (hover) => {
+    handleMouseHover = (hover, e) => {
         this.setState({
-            isHovered: hover
+            isHovered: hover,
+            hoverX: e.clientX,
+            hoverY: e.clientY
         });
     };
 
@@ -26,6 +28,20 @@ export class InventoryItem extends React.Component{
     };
 
     handleClick = (event) => {
+        let actions = this.props.item.Actions;
+        let activeAction = false;
+
+        for(let i = 0; i < actions.length; i++){
+            if(actions[i].Condition(this.props.item)){
+                activeAction = true;
+                break;
+            }
+        }
+
+        if(!activeAction){
+            return;
+        }
+
         this.setState({
             menuOpen: true,
             menuX: event.clientX,
@@ -51,17 +67,21 @@ export class InventoryItem extends React.Component{
 
     renderMenuItems(){
         let menuItems = this.props.item.Actions;
-        let mappedItems = Object.keys(menuItems).map((value, key) => {
-            return(
-                <div key={key} onClick={(e) => {
-                    menuItems[value](this.props.item);
-                    this.setState({
-                        menuOpen: false,
-                        hoverX: e.clientX,
-                        hoverY: e.clientY
-                    });
-                }}>{value}</div>
-            );
+        let mappedItems = menuItems.map((value, key) => {
+            if(value.Condition(this.props.item) === true){
+                return(
+                    <div key={key} onClick={(e) => {
+                        value.Click(this.props.item);
+                        this.setState({
+                            menuOpen: false,
+                            hoverX: e.clientX,
+                            hoverY: e.clientY
+                        });
+                    }}>{value.Name}</div>
+                );
+            } else {
+                return("");
+            }
         });
 
         return mappedItems;
@@ -72,8 +92,8 @@ export class InventoryItem extends React.Component{
             <div ref={this.wrapperRef}>
                 <div
                   className="item"
-                  onMouseEnter={() => this.handleMouseHover(true)}
-                  onMouseLeave={() => this.handleMouseHover(false)}
+                  onMouseEnter={(e) => this.handleMouseHover(true, e)}
+                  onMouseLeave={(e) => this.handleMouseHover(false, e)}
                   onMouseMove={this.handleMouseMove}
                   onClick={this.handleClick}
                 >

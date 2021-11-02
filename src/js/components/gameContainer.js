@@ -1,5 +1,6 @@
 import React from "react";
 import Core from "../core";
+import * as GameData from "../gamedata";
 import { Inventory, GameText, Options } from ".";
 
 export class GameContainer extends React.Component{
@@ -18,8 +19,8 @@ export class GameContainer extends React.Component{
         if(Core.instance !== null){
             console.warn("There is more than one active GameContainer instance. Things may not work as expected.");
         }
-        Core.instance = this;
-        Core.addToInventory(Core.getItemInstance(0));
+        Core.setInstance(this, GameData);
+        this.addToInventory(Core.instantiate(GameData.Items[0]));
     }
 
     componentWillUnmount(){
@@ -29,10 +30,8 @@ export class GameContainer extends React.Component{
     addToInventory = (item) => {
         let inv = this.state.inventory.slice();
 
-        inv.push({
-            uid: this.nextUid,
-            item: item
-        });
+        item.Uid = this.nextUid;
+        inv.push(item);
 
         this.setState({
             inventory: inv
@@ -46,6 +45,12 @@ export class GameContainer extends React.Component{
         newText.push(...arr);
         this.setState({
             text: newText
+        });
+    }
+
+    clearText = () => {
+        this.setState({
+            text: []
         });
     }
 
