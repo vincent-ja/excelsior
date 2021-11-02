@@ -29,7 +29,7 @@ var Items = {
                 Name: "Inspect",
                 Click: (item) => {
                     Core.print([
-                        "There are " + item.Arrows + " arrows left in the quiver./"
+                        "There are " + item.Arrows + " arrows left in the quiver./*"
                     ]);
                 }
             }),
@@ -40,7 +40,16 @@ var Items = {
                 },
                 Click: (item) => {
                     Core.print([
-                        "You shot an arrow. There are now " + --item.Arrows + " arrows left in the quiver./"
+                        "You shot an arrow. There are now " + --item.Arrows + " arrows left in the quiver./*[[Shoot another?]]/*/*",
+                        Core.newAction([
+                            Core.newButton({
+                                Name: "Yes",
+                                Click: (action) => {
+                                    item.Actions[1].Click(item);
+                                    action.activate(false);
+                                }
+                            })
+                        ])
                     ]);
                     item.UpdateDesc(item);
                 }

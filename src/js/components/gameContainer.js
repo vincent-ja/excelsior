@@ -2,6 +2,7 @@ import React from "react";
 import Core from "../core";
 import * as GameData from "../gamedata";
 import { Inventory, GameText, Options } from ".";
+import _ from "lodash";
 
 export class GameContainer extends React.Component{
     state = {
@@ -10,7 +11,10 @@ export class GameContainer extends React.Component{
             "Inspect the object"
         ],
         inventory: [],
-        text: []
+        text: {
+            text: "",
+            meta: []
+        }
     };
 
     nextUid = 0;
@@ -20,7 +24,8 @@ export class GameContainer extends React.Component{
             console.warn("There is more than one active GameContainer instance. Things may not work as expected.");
         }
         Core.setInstance(this, GameData);
-        this.addToInventory(Core.instantiate(GameData.Items[0]));
+        Core.addToInventory(Core.instantiate(GameData.Items[0]));
+        Core.gotoCell(GameData.Cells['Start']);
     }
 
     componentWillUnmount(){
@@ -41,8 +46,16 @@ export class GameContainer extends React.Component{
     }
 
     appendText = (arr) => {
-        let newText = this.state.text.slice();
-        newText.push(...arr);
+        let newText = _.cloneDeep(this.state.text);
+
+        for(let i = 0; i < arr.length; i++){
+            if(typeof arr[i] === 'string'){
+                newText.text = newText.text + arr[i];
+            } else {
+                newText.meta.push(arr[i]);
+            }
+        }
+        
         this.setState({
             text: newText
         });
@@ -50,7 +63,10 @@ export class GameContainer extends React.Component{
 
     clearText = () => {
         this.setState({
-            text: []
+            text: {
+                text: "",
+                meta: []
+            }
         });
     }
 
@@ -58,7 +74,7 @@ export class GameContainer extends React.Component{
         return (
             <div className="game-container">
                 <Inventory items={this.state.inventory}/>
-                <GameText text={this.state.text}/>
+                <GameText text={this.state.text.text} meta={this.state.text.meta}/>
                 <Options list={this.state.options} onSelection={(e) => alert(e)}/>
             </div>
         );

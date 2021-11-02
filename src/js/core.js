@@ -2,13 +2,15 @@ import _ from "lodash";
 
 export default class Core{
     static instance = null;
+    static visitedCells = {};
+    static currentCell = null;
+
+    static GameData = {};
 
     static setInstance(inst, gameData){
         this.instance = inst;
-        window.Excelsior = {
-            Core: this,
-            GameData: gameData
-        };
+        this.GameData = gameData;
+        window['Excelsior'] = this;
     }
 
     static instantiate = (item) => {
@@ -35,40 +37,34 @@ export default class Core{
         });
     }
 
+    static newAction = (options) => {
+        return {
+            Uid: this.instance.nextUid++,
+            Options: options
+        };
+    }
+
+    static gotoCell = (cell) => {
+        if(this.currentCell !== null){
+            this.visitedCells[this.currentCell.name] = _.cloneDeep(this.currentCell);
+        }
+        if(_.has(this.visitedCells, cell.name)){
+            this.currentCell = this.visitedCells[cell.name];
+        } else {
+            this.currentCell = new cell();
+        }
+        this.clear();
+        this.print(this.currentCell.onEnter());
+    }
+
     static addToInventory = (item) => {
         let uid = this.instance.addToInventory(item);
         item.AddedToInventory(item);
         return uid;
     }
 
-    static print = (spans, actionDefs = []) => {
-        let arr = [];
-        let actions = [];
-
-        for(let i = 0; i < spans.length; i++){
-            let type = "none";
-            let item = spans[i];
-
-            if(spans[i].endsWith("/")){
-                type = "line";
-                item = item.substring(0, item.length - 1);
-            } else if (spans[i].startsWith("[") && spans[i].endsWith("]")){
-                type = "action";
-                item = item.substring(1, item.length - 1);
-                actions.push(arr.length);
-            }
-
-            arr.push({
-                content: item,
-                type: type
-            });
-        }
-
-        for(let i = 0; i < actions.length; i++){
-            arr[actions[i]].options = actionDefs[i];
-        }
-
-        this.instance.appendText(arr, "none");
+    static print = (arr) => {
+        this.instance.appendText(arr);
     }
 
     static clear = () => {
