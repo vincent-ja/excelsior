@@ -6,7 +6,7 @@ var Items = {
         Desc: "A book that contains many powerful spells.",
         Actions: {
             "Summon a Bow & Arrow": () => {
-                Core.addItem(1);
+                Core.addToInventory(Core.getItemInstance(1));
             }
         }
     },

@@ -7,10 +7,9 @@ export class Inventory extends React.Component{
             return;
         }
 
-        var itms = this.props.items.slice();
-        const mappedItems = itms.map((value, key) => {
+        const mappedItems = this.props.items.map((value) => {
             return (
-                <InventoryItem key={key} id={value.id}/>
+                <InventoryItem key={value.uid} uid={value.uid} item={value.item}/>
             );
         });
 

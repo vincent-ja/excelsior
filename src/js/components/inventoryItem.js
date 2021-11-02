@@ -1,10 +1,7 @@
 import React from "react";
-import * as GameData from "../gamedata";
 
 export class InventoryItem extends React.Component{
     state = {
-        itemName: "< Unknown >",
-        itemDesc: "< Unknown >",
         isHovered: false,
         hoverX: 0,
         hoverY: 0,
@@ -14,15 +11,6 @@ export class InventoryItem extends React.Component{
     };
 
     wrapperRef = React.createRef();
-
-    constructor(props){
-        super(props);
-
-        if(GameData.Items[this.props.id]){
-            this.state.itemName = GameData.Items[this.props.id].Name;
-            this.state.itemDesc = GameData.Items[this.props.id].Desc;
-        }
-    }
 
     handleMouseHover = (hover) => {
         this.setState({
@@ -62,23 +50,21 @@ export class InventoryItem extends React.Component{
     }
 
     renderMenuItems(){
-        if(GameData.Items[this.props.id]){
-            let menuItems = GameData.Items[this.props.id].Actions;
-            let mappedItems = Object.keys(menuItems).map((value, key) => {
-                return(
-                    <div key={key} onClick={(e) => {
-                        menuItems[value](GameData.Items[this.props.id]);
-                        this.setState({
-                            menuOpen: false,
-                            hoverX: e.clientX,
-                            hoverY: e.clientY
-                        });
-                    }}>{value}</div>
-                );
-            });
+        let menuItems = this.props.item.Actions;
+        let mappedItems = Object.keys(menuItems).map((value, key) => {
+            return(
+                <div key={key} onClick={(e) => {
+                    menuItems[value](this.props.item);
+                    this.setState({
+                        menuOpen: false,
+                        hoverX: e.clientX,
+                        hoverY: e.clientY
+                    });
+                }}>{value}</div>
+            );
+        });
 
-            return mappedItems;
-        }
+        return mappedItems;
     }
 
     render(){
@@ -91,7 +77,7 @@ export class InventoryItem extends React.Component{
                   onMouseMove={this.handleMouseMove}
                   onClick={this.handleClick}
                 >
-                    {this.state.itemName}
+                    {this.props.item.Name}
                     <div
                       className="hover-block" 
                       style={{
@@ -100,8 +86,8 @@ export class InventoryItem extends React.Component{
                           left: this.state.hoverX + 5
                       }}
                     >
-                        <h3>{this.state.itemName}</h3>
-                        <p>{this.state.itemDesc}</p>
+                        <h3>{this.props.item.Name}</h3>
+                        <p>{this.props.item.Desc}</p>
                     </div>
                 </div>
                 <div

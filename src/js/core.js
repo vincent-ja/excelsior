@@ -1,8 +1,23 @@
+import _ from "lodash";
+import { Items } from "./gamedata";
+
 export default class Core{
     static instance = null;
 
-    static addItem = (id) => {
-        this.instance.addItem(id);
+    static getItemInstance = (id) => {
+        return _.cloneDeep(Items[id]);
+    }
+
+    static newItem = (item = {}) => {
+        return _.defaultsDeep(item, {
+            Name: "< Unknown >",
+            Desc: "",
+            Actions: {}
+        });
+    }
+
+    static addToInventory = (item) => {
+        this.instance.addToInventory(item);
     }
 
     static print = (spans, actionDefs = []) => {
