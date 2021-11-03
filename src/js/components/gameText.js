@@ -1,6 +1,9 @@
 import React from "react";
+import Core from "../core";
 
 export class GameText extends React.Component{
+    bottomRef = React.createRef();
+
     renderText(){
         let actionRE = /^\[\[.+?\]\]$/;
         let newLineRE = /^\/\*$/;
@@ -36,10 +39,15 @@ export class GameText extends React.Component{
         return mappedSections;
     }
 
+    componentDidUpdate(){
+        this.bottomRef.current.scrollIntoView({behavior: "smooth"});
+    }
+
     render(){
         return (
             <div className="game-text">
                 {this.renderText()}
+                <div ref={this.bottomRef}></div>
             </div>
         );
     }
@@ -86,7 +94,7 @@ export class Action extends React.Component{
         let activeOption = false;
 
         for(let i = 0; i < options.length; i++){
-            if(options[i].Condition(this)){
+            if(Core.runBehaviorBase(options[i], this, 'Unknown', 'Condition', true) === true){
                 activeOption = true;
                 break;
             }
@@ -106,10 +114,10 @@ export class Action extends React.Component{
     renderMenuItems(){
         let menuItems = this.props.obj.Options;
         let mappedItems = menuItems.map((value, key) => {
-            if(value.Condition(this) === true){
+            if(Core.runBehaviorBase(value, this, 'Unknown', 'Condition', true) === true){
                 return(
                     <div key={key} onClick={() => {
-                        value.Click(this);
+                        Core.runBehaviorBase(value, this, 'Unknown', 'Click');
                         this.setState({
                             menuOpen: false
                         });

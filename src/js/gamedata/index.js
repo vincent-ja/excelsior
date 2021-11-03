@@ -1,2 +1,2 @@
-export { Cells } from "./cells";
-export { default as Items } from "./items";
+export { Cells, CellBehaviors } from "./cells";
+export { Items, ItemBehaviors } from "./items";

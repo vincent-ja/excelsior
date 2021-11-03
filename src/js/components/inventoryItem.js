@@ -1,4 +1,5 @@
 import React from "react";
+import Core from "../core";
 
 export class InventoryItem extends React.Component{
     state = {
@@ -32,7 +33,7 @@ export class InventoryItem extends React.Component{
         let activeAction = false;
 
         for(let i = 0; i < actions.length; i++){
-            if(actions[i].Condition(this.props.item)){
+            if(Core.runBehaviorBase(actions[i], this.props.item, 'Item', 'Condition', true)){
                 activeAction = true;
                 break;
             }
@@ -68,10 +69,10 @@ export class InventoryItem extends React.Component{
     renderMenuItems(){
         let menuItems = this.props.item.Actions;
         let mappedItems = menuItems.map((value, key) => {
-            if(value.Condition(this.props.item) === true){
+            if(Core.runBehaviorBase(value, this.props.item, 'Item', 'Condition', true) === true){
                 return(
                     <div key={key} onClick={(e) => {
-                        value.Click(this.props.item);
+                        Core.runBehaviorBase(value, this.props.item, 'Item', 'Click');
                         this.setState({
                             menuOpen: false,
                             hoverX: e.clientX,

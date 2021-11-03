@@ -24,8 +24,8 @@ export class GameContainer extends React.Component{
             console.warn("There is more than one active GameContainer instance. Things may not work as expected.");
         }
         Core.setInstance(this, GameData);
-        Core.addToInventory(Core.instantiate(GameData.Items[0]));
-        Core.gotoCell(GameData.Cells['Start']);
+        Core.addToInventory(Core.instantiate("Spellbook"));
+        Core.gotoCell('Start');
     }
 
     componentWillUnmount(){
@@ -43,6 +43,21 @@ export class GameContainer extends React.Component{
         });
 
         return this.nextUid++;
+    }
+
+    removeFromInventory = (uid) => {
+        let inv = this.state.inventory.slice();
+        let ind = inv.findIndex(x => x.Uid == uid);
+
+        if(ind >= 0){
+            inv.splice(ind, 1);
+            this.setState({
+                inventory: inv
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 
     appendText = (arr) => {
