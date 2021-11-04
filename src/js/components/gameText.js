@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import Core from "../core";
 
@@ -63,12 +64,6 @@ export class Action extends React.Component{
 
     wrapperRef = React.createRef();
 
-    activate = (active = true) => {
-        this.setState({
-            active: active
-        });
-    }
-
     componentDidMount(){
         document.addEventListener('click', this.handleOutsideClick);
     }
@@ -94,7 +89,7 @@ export class Action extends React.Component{
         let activeOption = false;
 
         for(let i = 0; i < options.length; i++){
-            if(Core.runBehaviorBase(options[i], this, 'Unknown', 'Condition', true) === true){
+            if(Core.runBehaviorBase(options[i], this.props.obj, 'Unknown', 'Condition', true) === true){
                 activeOption = true;
                 break;
             }
@@ -114,10 +109,10 @@ export class Action extends React.Component{
     renderMenuItems(){
         let menuItems = this.props.obj.Options;
         let mappedItems = menuItems.map((value, key) => {
-            if(Core.runBehaviorBase(value, this, 'Unknown', 'Condition', true) === true){
+            if(Core.runBehaviorBase(value, this.props.obj, 'Unknown', 'Condition', true) === true){
                 return(
                     <div key={key} onClick={() => {
-                        Core.runBehaviorBase(value, this, 'Unknown', 'Click');
+                        Core.runBehaviorBase(value, this.props.obj, 'Unknown', 'Click');
                         this.setState({
                             menuOpen: false
                         });
@@ -132,10 +127,18 @@ export class Action extends React.Component{
     }
 
     render(){
+        let isActive = true;
+        if(_.has(this.props.obj, 'Active')){
+            let activeVal = this.props.obj.Active;
+            if(typeof activeVal === 'boolean'){
+                isActive = activeVal;
+            }
+        }
+
         return (
             <span ref={this.wrapperRef}>
                 <span
-                  className={this.state.active ? "action" : ""}
+                  className={isActive ? "action" : ""}
                   onClick={this.handleClick}
                 >
                       {this.props.children}

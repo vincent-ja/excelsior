@@ -36,6 +36,15 @@ export default class Core{
         this.instance.setState(stateObj);
     }
 
+    static getFullState(){
+        return JSON.stringify(this.state);
+    }
+
+    static setFullState(state){
+        this.state = JSON.parse(state);
+        this.setGameState(this.state.gameState);
+    }
+
     static runBehavior = (inst, type, path, def = null) => {
         return this.runBehaviorBase(inst, inst, type, path, def);
     }
@@ -142,10 +151,6 @@ export default class Core{
         this.setOptions(this.state.cellState[cell].Enter.Options, cell);
     }
 
-    static getInventoryItem = (uid) => {
-        return _.cloneDeep(this.state.gameState.inventory.find(x => x.Uid === uid));
-    }
-
     static addToInventory = (itemName) => {
         let item = _.cloneDeep(this.GameData.Items[itemName]);
         let inv =  _.cloneDeep(this.state.gameState.inventory);
@@ -162,6 +167,14 @@ export default class Core{
         return uid;
     }
 
+    static getInventoryItem = (uid) => {
+        return _.cloneDeep(this.state.gameState.inventory.find(x => x.Uid === uid));
+    }
+
+    static getMeta = (uid) => {
+        return _.cloneDeep(this.state.gameState.text.meta.find(x => x.Uid === uid));
+    }
+
     static updateItem = (item) => {
         let inv = _.cloneDeep(this.state.gameState.inventory);
         let ind = inv.findIndex(x => x.Uid == item.Uid);
@@ -170,6 +183,21 @@ export default class Core{
             inv[ind] = _.cloneDeep(item);
             this.setGameState({
                 inventory: inv
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static updateMeta = (meta) => {
+        let newText = _.cloneDeep(this.state.gameState.text);
+        let ind = newText.meta.findIndex(x => x.Uid == meta.Uid);
+
+        if(ind >= 0){
+            newText.meta[ind] = _.cloneDeep(meta);
+            this.setGameState({
+                text: newText
             });
             return true;
         } else {
@@ -199,6 +227,7 @@ export default class Core{
             if(typeof arr[i] === 'string'){
                 newText.text = newText.text + arr[i];
             } else {
+                arr[i].Uid = this.getUid();
                 newText.meta.push(arr[i]);
             }
         }

@@ -34,7 +34,8 @@ export var BowAndArrow = {
         Excelsior.runBehaviorCustom(item, 'Item', 'BowAndArrow.UpdateDesc');
     },
     CheckQuiver: (action, itemUid) => {
-        action.activate(false);
+        action.Active = false;
+        Excelsior.updateMeta(action);
         let item = Excelsior.getInventoryItem(itemUid);
         if(item !== undefined){
             Excelsior.print(["There are " + item.Arrows + " arrows in the quiver./*/*"]);
