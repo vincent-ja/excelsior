@@ -4,8 +4,20 @@ export default class Core{
     static GameData = {};
     static instance = null;
 
-    static cellState = {};
-    static currentCell = "";
+    static state = {
+        currentCell: "",
+        cellState: {},
+        nextUid: 0,
+        globals: {},
+        gameState: {
+            options: {},
+            inventory: [],
+            text: {
+                text: "",
+                meta: []
+            }
+        }
+    };
 
     static behaviorTypes = [
         "Item",
@@ -15,13 +27,13 @@ export default class Core{
     static setInstance(inst, gameData){
         this.instance = inst;
         this.GameData = gameData;
+        this.instance.state = _.cloneDeep(this.state.gameState);
         window['Excelsior'] = this;
     }
 
-    static instantiate = (item) => {
-        let inst = _.cloneDeep(this.GameData.Items[item]);
-        this.runBehavior(inst, 'Item', 'Init');
-        return inst;
+    static setGameState(stateObj = {}){
+        this.state.gameState = {...this.state.gameState, ..._.cloneDeep(stateObj)};
+        this.instance.setState(stateObj);
     }
 
     static runBehavior = (inst, type, path, def = null) => {
@@ -107,7 +119,7 @@ export default class Core{
 
         if(_.has(this.GameData[type + "Behaviors"], behaviorDef)){
             let behavior = _.get(this.GameData[type + "Behaviors"], behaviorDef);
-            return behavior(inst, ...args);
+            return behavior(_.cloneDeep(inst), ...args);
         } else {
             console.warn('"' + behaviorDef + '" is not a valid "' + type + '" behavior.');
             return def;
@@ -115,39 +127,99 @@ export default class Core{
     }
 
     static getUid = () => {
-        return this.instance.nextUid++;
+        return this.state.nextUid++;
     }
 
     static gotoCell = (cell) => {
-        this.currentCell = cell;
+        this.state.currentCell = cell;
 
-        if(!_.has(this.cellState, cell)){
-            this.cellState[cell] = _.cloneDeep(this.GameData.Cells[cell]);
+        if(!_.has(this.state.cellState, cell)){
+            this.state.cellState[cell] = _.cloneDeep(this.GameData.Cells[cell]);
         }
         
         this.clear();
-        this.print(this.cellState[cell].Enter);
+        this.print(this.state.cellState[cell].Enter.Text);
+        this.setOptions(this.state.cellState[cell].Enter.Options, cell);
     }
 
     static getInventoryItem = (uid) => {
-        return this.instance.state.inventory.find(x => x.Uid === uid);
+        return _.cloneDeep(this.state.gameState.inventory.find(x => x.Uid === uid));
     }
 
-    static addToInventory = (item) => {
-        let uid = this.instance.addToInventory(item);
+    static addToInventory = (itemName) => {
+        let item = _.cloneDeep(this.GameData.Items[itemName]);
+        let inv =  _.cloneDeep(this.state.gameState.inventory);
+        let uid = this.getUid();
+
+        item.Uid = uid;
+        inv.push(item);
+
+        this.setGameState({
+            inventory: inv
+        });
+
         this.runBehavior(item, 'Item', 'AddedToInventory');
         return uid;
     }
 
+    static updateItem = (item) => {
+        let inv = _.cloneDeep(this.state.gameState.inventory);
+        let ind = inv.findIndex(x => x.Uid == item.Uid);
+
+        if(ind >= 0){
+            inv[ind] = _.cloneDeep(item);
+            this.setGameState({
+                inventory: inv
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     static removeFromInventory = (uid) => {
-        return this.instance.removeFromInventory(uid);
+        let inv = _.cloneDeep(this.state.gameState.inventory);
+        let ind = inv.findIndex(x => x.Uid == uid);
+
+        if(ind >= 0){
+            inv.splice(ind, 1);
+            this.setGameState({
+                inventory: inv
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 
     static print = (arr) => {
-        this.instance.appendText(arr);
+        let newText = _.cloneDeep(this.state.gameState.text);
+
+        for(let i = 0; i < arr.length; i++){
+            if(typeof arr[i] === 'string'){
+                newText.text = newText.text + arr[i];
+            } else {
+                newText.meta.push(arr[i]);
+            }
+        }
+
+        this.setGameState({
+            text: newText
+        });
     }
 
     static clear = () => {
-        this.instance.clearText();
+        this.setGameState({
+            text: {
+                text: "",
+                meta: []
+            }
+        });
+    }
+
+    static setOptions = (opts, cellName) => {
+        this.setGameState({
+            options: { "Cell": cellName,  "Options": opts}
+        });
     }
 }

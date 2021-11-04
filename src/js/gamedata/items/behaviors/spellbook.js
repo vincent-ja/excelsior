@@ -1,5 +1,5 @@
 export var Spellbook = {
     SummonBow: () => {
-        Excelsior.addToInventory(Excelsior.instantiate('Bow & Arrow'));
+        Excelsior.addToInventory('Bow & Arrow');
     }
 };

@@ -1,15 +1,14 @@
 import _ from "lodash"
 
 export var BowAndArrow = {
-    Init: (item) => {
+    AddedToInventory: (item) => {
         item.Damage = _.random(1, 10);
         item.Arrows = _.random(2, 8);
-    },
-    AddedToInventory: (item) => {
         Excelsior.runBehaviorCustom(item, 'Item', 'BowAndArrow.UpdateDesc');
     },
     UpdateDesc: (item) => {
         item.Desc = "A wooden bow and a quiver with " + item.Arrows + " arrows. Deals " + item.Damage + " impact damage. UID: " + item.Uid;
+        Excelsior.updateItem(item);
     },
     HasArrows: (item, has = true) => {
         let hasArr = (item.Arrows > 0);

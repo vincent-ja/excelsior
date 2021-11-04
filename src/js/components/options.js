@@ -1,4 +1,6 @@
+import _ from "lodash";
 import React from "react";
+import Core from "../core";
 
 export class Options extends React.Component{    
     handleKeyDown = (e) => {
@@ -16,15 +18,14 @@ export class Options extends React.Component{
     }
 
     handleSelection(num){
-        if(typeof this.props.onSelection != "function" || typeof this.props.list != "object"){
-            return;
+        if(_.has(this.props.list, 'Options')){
+            if(num < 1 || num > this.props.list.Options.length){
+                return;
+            }
+    
+            let opts = this.props.list.Options;
+            Core.runBehaviorBase(opts[num - 1], this.props.list.Cell, 'Cell', 'Click');
         }
-
-        if(num < 1 || num > this.props.list.length){
-            return;
-        }
-        
-        this.props.onSelection(num - 1);
     }
 
     renderOptions(){
@@ -32,16 +33,22 @@ export class Options extends React.Component{
             return;
         }
 
-        var lst = this.props.list.slice();
-        const mappedList = lst.map((value, key) => {
-            let num = key + 1;
-
-            return (
-                <div onClick={() => this.handleSelection(num)} key={num}>{num}.) {value}</div>
-            );
-        });
-
-        return mappedList;
+        if(_.has(this.props.list, 'Options')){
+            const mappedList = this.props.list.Options.map((value, key) => {
+                let num = key + 1;
+    
+                return (
+                    <div
+                      onClick={() => this.handleSelection(num)}
+                      key={num}
+                    >
+                        {num}.) {value.Name}
+                    </div>
+                );
+            });
+    
+            return mappedList;
+        }
     }
 
     render(){

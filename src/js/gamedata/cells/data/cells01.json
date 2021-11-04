@@ -1,7 +1,40 @@
 {
     "Start": {
-        "Enter": [
-            "Welcome to Excelsior!/*/*Give the Spellbook a click to try out some things./*/*"
-        ]
+        "Enter": {
+            "Text": [
+                "Welcome to Excelsior!/*/*Give the Spellbook a click to try out some things./*/*"
+            ],
+            "Options": [
+                {
+                    "Name": "New Game",
+                    "Click": {
+                        "Behavior": "Base.GoTo",
+                        "Args": [ "Test" ]
+                    }
+                },
+                {
+                    "Name": "Load Game"
+                },
+                {
+                    "Name": "Settings"
+                }
+            ]
+        }
+    },
+    "Test": {
+        "Enter": {
+            "Text": [
+                "This is a test room!/*/*"
+            ],
+            "Options": [
+                {
+                    "Name": "Go back to start",
+                    "Click": {
+                        "Behavior": "Base.GoTo",
+                        "Args": [ "Start" ]
+                    }
+                }
+            ]
+        }
     }
 }
