@@ -1,0 +1,18 @@
+{
+    "Spellbook": {
+        "Name": "Spellbook",
+        "Desc": "A book that contains many powerful spells.",
+        "Options": [
+            {"Name": "Summon a Bow & Arrow", "Click": ["AddToInventory", "Bow & Arrow"]}
+        ]
+    },
+    "Bow & Arrow": {
+        "Name": "Bow & Arrow",
+        "Desc": "A wooden bow and a quiver full of arrows.",
+        "AddedToInventory": ["BowAndArrow.AddedToInventory"],
+        "Options": [
+            {"Name": "Shoot", "Condition": ["BowAndArrow.HasArrows"], "Click": ["BowAndArrow.Shoot"]},
+            {"Name": "Dispose", "Condition": ["BowAndArrow.HasArrows", false], "Click": ["Self.RemoveFromInventory"]}
+        ]
+    }
+}

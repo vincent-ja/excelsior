@@ -29,7 +29,7 @@ export class InventoryItem extends React.Component{
     };
 
     handleClick = (event) => {
-        let actions = this.props.item.Actions;
+        let actions = this.props.item.Options;
         let activeAction = false;
 
         for(let i = 0; i < actions.length; i++){
@@ -67,7 +67,7 @@ export class InventoryItem extends React.Component{
     }
 
     renderMenuItems(){
-        let menuItems = this.props.item.Actions;
+        let menuItems = this.props.item.Options;
         let mappedItems = menuItems.map((value, key) => {
             if(Core.runBehaviorBase(value, this.props.item, 'Item', 'Condition', true) === true){
                 return(

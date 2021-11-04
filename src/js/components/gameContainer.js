@@ -1,7 +1,7 @@
 import React from "react";
 import Core from "../core";
 import * as GameData from "../gamedata";
-import { Inventory, GameText, Options } from ".";
+import { Inventory, GameText, Options, Stats } from ".";
 
 export class GameContainer extends React.Component{
     constructor(){
@@ -27,6 +27,7 @@ export class GameContainer extends React.Component{
                 <Inventory items={this.state.inventory}/>
                 <GameText text={this.state.text.text} meta={this.state.text.meta}/>
                 <Options list={this.state.options}/>
+                <Stats/>
             </div>
         );
     }

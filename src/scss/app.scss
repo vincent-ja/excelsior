@@ -22,7 +22,7 @@ body{
     grid-template-columns: 0.20fr 0.80fr;
     grid-template-rows: 0.75fr 0.25fr;
     grid-template-areas: "inventory gametext"
-                         "inventory options";
+                         "stats options";
     grid-gap: 20px;
 }
 
@@ -56,7 +56,7 @@ body{
     border-top: 1px dashed rgb(80,80,80);
     padding: 20px;
     min-height: 0;
-    overflow: inherit;
+    overflow: auto;
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(auto-fill, 30px);
@@ -69,6 +69,69 @@ body{
             text-decoration: underline;
             cursor: pointer;
         }
+    }
+}
+
+.stats{
+    grid-area: stats;
+    padding: 20px;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .inner{
+        padding: 25px 20px 10px 0px;
+    }
+
+    .stat-container{
+        margin-bottom: 10px;
+    }
+
+    .stat-info{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .stat-bar{
+        width: 100%;
+        height: 1px;
+        position: relative;
+        border-radius: 10px;
+        background-color: rgba(60,60,60,0.8);
+        overflow: hidden;
+        margin-top: 2px;
+
+        .filled{
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: -0%;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(230,0,0);
+            transition: left 0.3s;
+        }
+    }
+
+    &::before{
+        content: '';
+        position: absolute;
+        width: calc(100% - 20px);
+        border-top: 1px dashed rgb(80,80,80);
+        top: 0px;
+        left: 0px;
+    }
+
+    &::after{
+        content: '';
+        position: absolute;
+        height: calc(100% - 20px);
+        border-right: 1px dashed rgb(80,80,80);
+        right: 0px;
+        top: 20px;
     }
 }
 

@@ -19,10 +19,17 @@ export default class Core{
         }
     };
 
-    static behaviorTypes = [
-        "Item",
-        "Cell"
-    ];
+    static setGlobal(name, value){
+        this.state.globals[name] = value;
+    }
+
+    static getGlobal(name){
+        if(_.has(this.state.globals, name)){
+            return this.state.globals[name];
+        } else {
+            return undefined;
+        }
+    }
 
     static setInstance(inst, gameData){
         this.instance = inst;
@@ -45,15 +52,31 @@ export default class Core{
         this.setGameState(this.state.gameState);
     }
 
+    static shorthandBehaviorToObj = (beh) => {
+        if(Array.isArray(beh)){
+            let result = {};
+            let args = [];
+
+            for(let i = 0; i < beh.length; i++){
+                if(i === 0){
+                    result["Behavior"] = beh[i];
+                } else {
+                    args.push(beh[i]);
+                }
+            }
+
+            result["Args"] = args;
+            return result;
+        } else {
+            return beh;
+        }
+    }
+
     static runBehavior = (inst, type, path, def = null) => {
         return this.runBehaviorBase(inst, inst, type, path, def);
     }
 
     static runBehaviorBase = (base, inst, type, path, def = null) => {
-        if(!this.behaviorTypes.some(x => x === type) && type !== 'Unknown'){
-            console.warn('"' + type + '" is not a valid behavior type.');
-        }
-
         /* 
         Check if the base object has the property we're looking for.
         The property should be a behavior definition object.
@@ -66,7 +89,7 @@ export default class Core{
         */
         if(_.has(base, path)){
             // If the property exists, get its value & check that it is a valid behavior definition object.
-            let defObj = _.get(base, path);
+            let defObj = this.shorthandBehaviorToObj(_.get(base, path));
             if(typeof defObj !== 'object'){
                 console.warn('Behavior definition is not an object.');
                 return def;
@@ -80,26 +103,6 @@ export default class Core{
             if(typeof defObj.Behavior !== 'string'){
                 console.warn('Behavior definition "Behavior" property is not a string.');
                 return def;
-            }
-
-            if(type === 'Unknown'){
-                if(_.has(defObj, 'BehaviorType')){
-                    let behvType = _.get(defObj, 'BehaviorType');
-                    if(typeof behvType === 'string'){
-                        if(this.behaviorTypes.some(x => x === behvType)){
-                            type = behvType;
-                        } else {
-                            console.warn('"' + type + '" is not a valid behavior type.');
-                            return def;
-                        }
-                    } else {
-                        console.warn('Behavior definition "BehaviorType" property is not a string.');
-                        return def;
-                    }
-                } else {
-                    console.warn('Behavior definition of unknown type does not have a "BehaviorType" property.');
-                    return def;
-                }
             }
 
             let args = [];
@@ -121,14 +124,9 @@ export default class Core{
     }
 
     static runBehaviorCustom = (inst, type, behaviorDef, args = [], def = null) => {
-        if(!this.behaviorTypes.some(x => x === type)){
-            console.warn('"' + type + '" is not a valid behavior type.');
-            return def;
-        }
-
-        if(_.has(this.GameData[type + "Behaviors"], behaviorDef)){
-            let behavior = _.get(this.GameData[type + "Behaviors"], behaviorDef);
-            return behavior(_.cloneDeep(inst), ...args);
+        if(_.has(this.GameData.Behaviors, behaviorDef)){
+            let behavior = _.get(this.GameData.Behaviors, behaviorDef);
+            return behavior({api: this, data: _.cloneDeep(inst), type: type}, ...args);
         } else {
             console.warn('"' + behaviorDef + '" is not a valid "' + type + '" behavior.');
             return def;

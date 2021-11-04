@@ -1,0 +1,27 @@
+{
+    "Start": {
+        "Enter": {
+            "Text": [
+                "*[Excelsior Demo Game]*/*/*",
+                {"Style": {"fontSize": "25px", "display": "table", "margin": "auto"}},
+                "[[ < New Game > ]]",
+                {"Style": {"fontSize": "18px", "display": "table", "margin": "25px auto"}, "Click": ["GoTo", "Test"]},
+                "[[ < Load Game > ]]",
+                {"Style": {"fontSize": "18px", "display": "table", "margin": "25px auto"}, "Click": ["GoTo", "Test"]},
+                "[[ < Settings > ]]",
+                {"Style": {"fontSize": "18px", "display": "table", "margin": "25px auto"}, "Click": ["GoTo", "Test"]}
+            ],
+            "Options": []
+        }
+    },
+    "Test": {
+        "Enter": {
+            "Text": [
+                "This is a test room!/*/*"
+            ],
+            "Options": [
+                {"Name": "Go back to start", "Click": ["GoTo", "Start"]}
+            ]
+        }
+    }
+}
