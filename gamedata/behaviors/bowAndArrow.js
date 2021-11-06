@@ -24,7 +24,7 @@ export var BowAndArrow = {
             },
             "./*/*"
         ]);
-        Excelsior.runBehaviorCustom(e.data, 'Item', 'BowAndArrow.UpdateDesc');
+        e.api.runBehaviorCustom(e.data, 'Item', 'BowAndArrow.UpdateDesc');
     },
     CheckQuiver: (e, itemUid) => {
         e.data.Active = false;

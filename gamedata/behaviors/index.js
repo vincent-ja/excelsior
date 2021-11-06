@@ -5,8 +5,11 @@ export {
     SetGloabl,
     GlobalEquals,
     AddToInventory,
+    RegisterStat,
+    GlobalNotEquals,
+    Print,
     Self
 } from "./base";
 
 export { BowAndArrow } from "./bowAndArrow";
-export { Spellbook } from "./bowAndArrow";
+export { Cabin } from "./cabin";

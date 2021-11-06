@@ -17,11 +17,23 @@ export var SetGloabl = (e, name, value) => {
 }
 
 export var GlobalEquals = (e, name, value) => {
-    return e.api.getGloabl(name) === value;
+    return e.api.getGlobal(name) === value;
+}
+
+export var GlobalNotEquals = (e, name, value) => {
+    return e.api.getGlobal(name) !== value;
 }
 
 export var AddToInventory = (e, itemName) => {
     e.api.addToInventory(itemName);
+}
+
+export var RegisterStat = (e, statName, initialValue, color = [250,0,0], max = -1) => {
+    e.api.registerStat(statName, initialValue, color, max);
+}
+
+export var Print = (e, text) => {
+    e.api.print(text);
 }
 
 export var Self = {

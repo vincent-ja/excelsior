@@ -1,67 +1,50 @@
+import _ from "lodash";
 import React from "react";
 
 export class Stats extends React.Component{
+    renderContainers(){
+        if(typeof this.props.list !== 'object'){
+            return;
+        }
+
+        const mappedStats = this.props.list.map((value, key) => {
+            let percentage = 100;
+            let amount = `${value.Value}`;
+
+            if(_.has(value, 'HasMax') && value.HasMax === true){
+                amount = `${value.Value}/${value.Max}`;
+                percentage = Math.round((value.Value / value.Max) * 100);
+            }
+
+            return (
+                <div className="stat-container" key={key}>
+                    <div className="stat-info">
+                        <span>
+                            {value.Name}
+                        </span>
+                        <span>
+                            {amount}
+                        </span>
+                    </div>
+                    <div className="stat-bar">
+                        <div
+                          className="filled"
+                          style={{left: `-${100 - percentage}%`, backgroundColor: `rgb(${value.Color[0]}, ${value.Color[1]}, ${value.Color[2]})`}}
+                        >
+                        </div>
+                    </div>
+                </div>
+            );
+        });
+
+        return mappedStats;
+    }
+
     render(){
         return (
             <div className="stats">
                 <div className="inner">
-
-                    <div className="stat-container">
-                        <div className="stat-info">
-                            <span>
-                                Health
-                            </span>
-                            <span>
-                                100/100
-                            </span>
-                        </div>
-                        <div className="stat-bar">
-                            <div className="filled"></div>
-                        </div>
-                    </div>
-
-                    <div className="stat-container">
-                        <div className="stat-info">
-                            <span>
-                                Shield
-                            </span>
-                            <span>
-                                100/100
-                            </span>
-                        </div>
-                        <div className="stat-bar">
-                            <div className="filled" style={{backgroundColor: "rgb(188, 13, 252)"}}></div>
-                        </div>
-                    </div>
-
-                    <div className="stat-container">
-                        <div className="stat-info">
-                            <span>
-                                Mana
-                            </span>
-                            <span>
-                                100/100
-                            </span>
-                        </div>
-                        <div className="stat-bar">
-                            <div className="filled" style={{backgroundColor: "rgb(85, 239, 250)"}}></div>
-                        </div>
-                    </div>
-
-                    <div className="stat-container">
-                        <div className="stat-info">
-                            <span>
-                                Gold
-                            </span>
-                            <span>
-                                4000
-                            </span>
-                        </div>
-                        <div className="stat-bar">
-                            <div className="filled" style={{backgroundColor: "rgb(255, 223, 1)"}}></div>
-                        </div>
-                    </div>
-
+                    {this.renderContainers()}
                 </div>
             </div>
         );

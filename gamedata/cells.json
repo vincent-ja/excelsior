@@ -1,0 +1,34 @@
+{
+    "Start": {
+        "Enter": {
+            "Text": [
+                "*[Excelsior Demo Game]*/*/*/*",
+                {"Style": {"fontSize": "28px"}},
+                "[[ > New Game ]]/*/*",
+                {"Style": {"fontSize": "18px"}, "Click": ["GoTo", "Cabin"]},
+                "[[ > Load Game ]]/*/*",
+                {"Style": {"fontSize": "18px"}},
+                "[[ > Settings ]]/*/*",
+                {"Style": {"fontSize": "18px"}}
+            ]
+        }
+    },
+    "Cabin": {
+        "Init": ["Cabin.Init"],
+        "Enter": {
+            "Text": [
+                "You awaken in a wooden cabin in the middle of a forest./*/*",
+                "There is a ", {"Condition": ["Cabin.BowTaken"]}, "/?wardrobe?/", {"Condition": ["Cabin.BowTaken", false]}, "/?[[wardrobe]]?/",
+                {
+                    "Options": [
+                        {"Name": "Inspect", "Click": ["Cabin.InspectWardrobe"]}
+                    ]
+                },
+                " to the west, and a door to the north./*/*"
+            ],
+            "Options": [
+                {"Name": "Go back to start", "Click": ["GoTo", "Start"]}
+            ]
+        }
+    }
+}

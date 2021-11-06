@@ -1,7 +1,7 @@
 import _ from "lodash";
+import * as GameData from "../../gamedata";
 
 export default class Core{
-    static GameData = {};
     static instance = null;
 
     static state = {
@@ -15,9 +15,26 @@ export default class Core{
             text: {
                 text: "",
                 meta: []
-            }
+            },
+            stats: []
         }
     };
+
+    static registerStat(name, initialValue, color = [250,0,0], max = -1){
+        let result = {
+            Name: name,
+            Value: initialValue,
+            Color: color
+        }
+        if(max > -1){
+            result.HasMax = true;
+            result.Max = max;
+        }
+
+        let stats = _.cloneDeep(this.state.gameState.stats);
+        stats.push(result);
+        this.setGameState({stats: stats});
+    }
 
     static setGlobal(name, value){
         this.state.globals[name] = value;
@@ -31,11 +48,10 @@ export default class Core{
         }
     }
 
-    static setInstance(inst, gameData){
+    static setInstance(inst){
         this.instance = inst;
-        this.GameData = gameData;
         this.instance.state = _.cloneDeep(this.state.gameState);
-        window['Excelsior'] = this;
+        window['excelsior'] = this;
     }
 
     static setGameState(stateObj = {}){
@@ -124,8 +140,8 @@ export default class Core{
     }
 
     static runBehaviorCustom = (inst, type, behaviorDef, args = [], def = null) => {
-        if(_.has(this.GameData.Behaviors, behaviorDef)){
-            let behavior = _.get(this.GameData.Behaviors, behaviorDef);
+        if(_.has(GameData.Behaviors, behaviorDef)){
+            let behavior = _.get(GameData.Behaviors, behaviorDef);
             return behavior({api: this, data: _.cloneDeep(inst), type: type}, ...args);
         } else {
             console.warn('"' + behaviorDef + '" is not a valid "' + type + '" behavior.');
@@ -141,16 +157,27 @@ export default class Core{
         this.state.currentCell = cell;
 
         if(!_.has(this.state.cellState, cell)){
-            this.state.cellState[cell] = _.cloneDeep(this.GameData.Cells[cell]);
+            this.state.cellState[cell] = _.cloneDeep(GameData.Cells[cell]);
+            this.runBehavior(this.state.cellState[cell], 'cell', 'Init');
         }
+
+        let activeCell = this.state.cellState[cell];
         
         this.clear();
-        this.print(this.state.cellState[cell].Enter.Text);
-        this.setOptions(this.state.cellState[cell].Enter.Options, cell);
+        this.runBehavior(activeCell, 'cell', 'BeforeEnter');
+        if(_.has(activeCell, 'Enter.Text')){
+            this.print(activeCell.Enter.Text);
+        }
+        if(_.has(activeCell, 'Enter.Options')){
+            this.setOptions(activeCell.Enter.Options, cell);
+        } else {
+            this.setOptions([], cell);
+        }
+        this.runBehavior(activeCell, 'cell', 'AfterEnter');
     }
 
     static addToInventory = (itemName) => {
-        let item = _.cloneDeep(this.GameData.Items[itemName]);
+        let item = _.cloneDeep(GameData.Items[itemName]);
         let inv =  _.cloneDeep(this.state.gameState.inventory);
         let uid = this.getUid();
 
