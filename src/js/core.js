@@ -6,24 +6,24 @@ export default class Core{
 
     static state = {
         currentCell: "",
-            cellState: {},
-            nextUid: 0,
-            globals: {},
-            gameState: {
-                options: {},
-                inventory: [],
-                text: {
-                    text: "",
-                    meta: []
-                },
-                stats: []
-            }
+        initCells: [],
+        nextUid: 0,
+        globals: {},
+        gameState: {
+            options: {},
+            inventory: [],
+            text: {
+                text: "",
+                meta: []
+            },
+            stats: []
+        }
     };
 
     static resetGame(){
         this.state = {
             currentCell: "",
-            cellState: {},
+            initCells: [],
             nextUid: 0,
             globals: {},
             gameState: {}
@@ -196,13 +196,12 @@ export default class Core{
 
     static gotoCell = (cell) => {
         this.state.currentCell = cell;
+        let activeCell = _.cloneDeep(GameData.Cells[cell]);
 
-        if(!_.has(this.state.cellState, cell)){
-            this.state.cellState[cell] = _.cloneDeep(GameData.Cells[cell]);
-            this.runBehavior(this.state.cellState[cell], 'cell', 'Init');
+        if(!this.state.initCells.includes(cell)){
+            this.state.initCells.push(cell);
+            this.runBehavior(activeCell, 'cell', 'Init');
         }
-
-        let activeCell = this.state.cellState[cell];
         
         this.clear();
         this.runBehavior(activeCell, 'cell', 'BeforeEnter');
