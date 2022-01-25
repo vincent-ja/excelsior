@@ -92,6 +92,13 @@ export class Action extends React.Component{
             }
         }
 
+        if(_.has(this.props.obj, 'Condition')){
+            let res = Core.runBehaviorBase(this.props.obj, null, 'Unknown', 'Condition', false);
+            if(res === false){
+                active = false;
+            }
+        }
+
         return active;
     }
 

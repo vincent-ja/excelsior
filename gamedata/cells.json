@@ -18,8 +18,9 @@
         "Enter": {
             "Text": [
                 "You awaken in a wooden cabin in the middle of a forest./*/*",
-                "There is a ", {"Condition": ["Cabin.BowTaken"]}, "/?wardrobe?/", {"Condition": ["Cabin.BowTaken", false]}, "/?[[wardrobe]]?/",
+                "There is a [[wardrobe]]",
                 {
+                    "Condition": ["GlobalEquals", "Cabin:SpellbookTaken", false],
                     "Options": [
                         {"Name": "Inspect", "Click": ["Cabin.InspectWardrobe"]}
                     ]
