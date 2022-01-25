@@ -6,8 +6,7 @@ export class Action extends React.Component{
     state = {
         menuOpen: false,
         menuX: 0,
-        menuY: 0,
-        active: true
+        menuY: 0
     }
 
     wrapperRef = React.createRef();
@@ -29,7 +28,7 @@ export class Action extends React.Component{
     };
 
     handleClick = (event) => {
-        if(!this.state.active){
+        if(!this.isActive()){
             return;
         }
 
@@ -84,19 +83,23 @@ export class Action extends React.Component{
         }
     }
 
-    render(){
-        let isActive = true;
+    isActive(){
+        let active = true;
         if(_.has(this.props.obj, 'Active')){
             let activeVal = this.props.obj.Active;
             if(typeof activeVal === 'boolean'){
-                isActive = activeVal;
+                active = activeVal;
             }
         }
 
+        return active;
+    }
+
+    render(){
         return (
             <span ref={this.wrapperRef} style={this.props.style}>
                 <span
-                  className={isActive ? "action" : ""}
+                  className={this.isActive() ? "action" : ""}
                   onClick={this.handleClick}
                 >
                       {this.props.children}

@@ -14,11 +14,12 @@ body{
     border: 1px solid rgb(0,0,10);
     box-shadow: 0px 0px 5px 0px rgb(0,0,0);
     border-radius: 10px;
-    height: 600px;
-    width: 900px;
+    aspect-ratio: 16 / 9;
+    height:100vh;
     padding: 20px;
     box-sizing: border-box;
     display: grid;
+    font-size: 15px;
     grid-template-columns: 0.20fr 0.80fr;
     grid-template-rows: 0.75fr 0.25fr;
     grid-template-areas: "inventory gametext"
@@ -154,6 +155,11 @@ body{
     max-width: 250px;
     box-shadow: 0px 0px 10px 0px rgb(40,40,40);
     z-index: 20;
+    border-radius: 5px;
+    animation: pop-open-top 0.1s;
+    animation-timing-function: cubic-bezier(.17,.67,.83,.67);
+    overflow: hidden;
+    
 
     h3{
         margin: 0;
@@ -165,6 +171,32 @@ body{
     }
 }
 
+@keyframes pop-open-topleft{
+    0%{
+        opacity:0%;
+        transform: scale(0.8);
+        transform-origin: top left;
+    }
+    100%{
+        opacity:100%;
+        transform: scale(1);
+        transform-origin: top left;
+    }
+}
+
+@keyframes pop-open-top{
+    0%{
+        opacity:80%;
+        transform: scaleY(0.8);
+        transform-origin: top;
+    }
+    100%{
+        opacity:100%;
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+}
+
 .menu{
     position: absolute;
     background-color: rgb(0,0,50);
@@ -173,6 +205,10 @@ body{
     box-shadow: 0px 0px 10px 0px rgb(40,40,40);
     z-index: 10;
     padding: 4px 8px 4px 8px;
+    overflow: hidden;
+    border-radius: 10px;
+    animation: pop-open-topleft 0.1s;
+    animation-timing-function: cubic-bezier(.17,.67,.83,.67);
 
     div{
         padding: 4px 0px 4px 0px;
