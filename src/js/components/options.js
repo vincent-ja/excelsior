@@ -36,6 +36,11 @@ export class Options extends React.Component{
         if(_.has(this.props.list, 'Options')){
             const mappedList = this.props.list.Options.map((value, key) => {
                 let num = key + 1;
+
+                let res = Core.runBehaviorBase(value, null, 'Unknown', 'Condition', true);
+                if(res === false){
+                    return;
+                }
     
                 return (
                     <div

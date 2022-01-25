@@ -12,7 +12,7 @@ export class GameContainer extends React.Component{
     }
 
     componentDidMount(){
-        Core.gotoCell('Start');
+        Core.resetGame();
     }
 
     componentWillUnmount(){

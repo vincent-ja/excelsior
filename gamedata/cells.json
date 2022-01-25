@@ -28,7 +28,7 @@
                 " to the west, and a door to the north./*/*"
             ],
             "Options": [
-                {"Name": "Go back to start", "Click": ["GoTo", "Start"]}
+                {"Name": "Go back to start", "Click": ["ResetGame"]}
             ]
         }
     }

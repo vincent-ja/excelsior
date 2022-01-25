@@ -36,6 +36,10 @@ export var Print = (e, text) => {
     e.api.print(text);
 }
 
+export var ResetGame = (e) => {
+    e.api.resetGame();
+}
+
 export var Self = {
     RemoveFromInventory: (e) => {
         if(_.has(e.data, 'Uid')){

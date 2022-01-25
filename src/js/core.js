@@ -6,10 +6,30 @@ export default class Core{
 
     static state = {
         currentCell: "",
-        cellState: {},
-        nextUid: 0,
-        globals: {},
-        gameState: {
+            cellState: {},
+            nextUid: 0,
+            globals: {},
+            gameState: {
+                options: {},
+                inventory: [],
+                text: {
+                    text: "",
+                    meta: []
+                },
+                stats: []
+            }
+    };
+
+    static resetGame(){
+        this.state = {
+            currentCell: "",
+            cellState: {},
+            nextUid: 0,
+            globals: {},
+            gameState: {}
+        };
+
+        this.setGameState({
             options: {},
             inventory: [],
             text: {
@@ -17,8 +37,10 @@ export default class Core{
                 meta: []
             },
             stats: []
-        }
-    };
+        });
+
+        this.gotoCell("Start");
+    }
 
     static registerStat(name, initialValue, color = [250,0,0], max = -1){
         let result = {
@@ -34,6 +56,25 @@ export default class Core{
         let stats = _.cloneDeep(this.state.gameState.stats);
         stats.push(result);
         this.setGameState({stats: stats});
+    }
+
+    static updateStat(stat){
+        let stats = _.cloneDeep(this.state.gameState.stats);
+        let ind = stats.findIndex(x => x.Name == stat.Name);
+
+        if(ind >= 0){
+            stats[ind] = _.cloneDeep(stat);
+            this.setGameState({
+                stats: stats
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static getStat(name){
+        return _.cloneDeep(this.state.gameState.stats.find(x => x.Name === name));
     }
 
     static setGlobal(name, value){

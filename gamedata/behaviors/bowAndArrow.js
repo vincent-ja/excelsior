@@ -25,6 +25,10 @@ export var BowAndArrow = {
             "./*/*"
         ]);
         e.api.runBehaviorCustom(e.data, 'Item', 'BowAndArrow.UpdateDesc');
+
+        let health = e.api.getStat("Health");
+        health.Value-= e.data.Damage;
+        e.api.updateStat(health);
     },
     CheckQuiver: (e, itemUid) => {
         e.data.Active = false;

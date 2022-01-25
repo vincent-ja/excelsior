@@ -8,6 +8,7 @@ export {
     RegisterStat,
     GlobalNotEquals,
     Print,
+    ResetGame,
     Self
 } from "./base";
 
