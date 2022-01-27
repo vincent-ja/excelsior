@@ -26,6 +26,7 @@ export class GameContainer extends React.Component{
                 <GameText text={this.state.text.text} meta={this.state.text.meta}/>
                 <Options list={this.state.options}/>
                 <Stats list={this.state.stats}/>
+                {/*<div className="onTop"><div><span>Enter Text:</span><br/><input type="text"></input><br/><button style={{float: "right"}}>Accept</button></div></div>*/}
             </div>
         );
     }

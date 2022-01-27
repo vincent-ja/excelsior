@@ -1,3 +1,38 @@
+@keyframes pop-open-topleft{
+    0%{
+        opacity:0%;
+        transform: scale(0.8);
+        transform-origin: top left;
+    }
+    100%{
+        opacity:100%;
+        transform: scale(1);
+        transform-origin: top left;
+    }
+}
+
+@keyframes pop-open-top{
+    0%{
+        opacity:80%;
+        transform: scaleY(0.8);
+        transform-origin: top;
+    }
+    100%{
+        opacity:100%;
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+}
+
+@keyframes fade-in{
+    0%{
+        opacity:0%;
+    }
+    100%{
+        opacity:100%;
+    }
+}
+
 body{
     margin: 0;
     display: flex;
@@ -7,6 +42,69 @@ body{
     background-color: rgb(20,20,20);
     font-family: monospace;
     color: rgb(255,255,255);
+}
+
+.onTop{
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fade-in 0.1s;
+    animation-timing-function: cubic-bezier(.17,.67,.83,.67);
+
+    div{
+        background-color: rgb(0,0,50);
+        border: 1px solid rgb(80,80,80);
+        padding: 20px;
+        max-width: 250px;
+        box-shadow: 0px 0px 10px 0px rgb(5,5,5);
+        z-index: 20;
+        border-radius: 5px;
+        animation: pop-open-top 0.1s;
+        animation-timing-function: cubic-bezier(.17,.67,.83,.67);
+        overflow: hidden;
+    }
+}
+
+button{
+    border-radius: 5px;
+    margin: 5px 0px 0px 0px;
+    padding:6px;
+    background-color: rgb(0,0,50);
+    border: 1px solid rgb(80,80,80);
+    color: white;
+    font-family:monospace;
+    font-size: 15px;
+    transition: border 0.1s;
+    transition-timing-function: cubic-bezier(.17,.67,.83,.67);
+}
+
+button:hover{
+    border: 1px solid rgb(150,150,150);
+}
+
+input[type=text]{
+    width: 200px;
+    border-radius: 5px;
+    margin: 5px 0px 0px 0px;
+    padding:6px;
+    background-color: rgb(0,0,50);
+    border: 1px solid rgb(80,80,80);
+    color: white;
+    font-family:monospace;
+    font-size: 15px;
+    transition: border 0.1s;
+    transition-timing-function: cubic-bezier(.17,.67,.83,.67);
+}
+
+input[type=text]:focus{
+    border: 1px solid rgb(200,200,200);
 }
 
 .game-container{
@@ -168,32 +266,6 @@ body{
 
     p{
         margin-bottom: 0;
-    }
-}
-
-@keyframes pop-open-topleft{
-    0%{
-        opacity:0%;
-        transform: scale(0.8);
-        transform-origin: top left;
-    }
-    100%{
-        opacity:100%;
-        transform: scale(1);
-        transform-origin: top left;
-    }
-}
-
-@keyframes pop-open-top{
-    0%{
-        opacity:80%;
-        transform: scaleY(0.8);
-        transform-origin: top;
-    }
-    100%{
-        opacity:100%;
-        transform: scaleY(1);
-        transform-origin: top;
     }
 }
 
