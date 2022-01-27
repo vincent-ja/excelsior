@@ -20,7 +20,7 @@
                 "You awaken in a wooden cabin in the middle of a forest./*/*",
                 "There is a [[wardrobe]]",
                 {
-                    "Condition": ["GlobalEquals", "Cabin:SpellbookTaken", false],
+                    "Condition": ["GlobalEquals", "Cabin:WardrobeInspected", false],
                     "Options": [
                         {"Name": "Inspect", "Click": ["Cabin.InspectWardrobe"]}
                     ]
